@@ -1,0 +1,39 @@
+server:
+  port: 4070
+
+spring:
+  datasource:
+    hikari:
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:mysql://144.24.74.58:3306/BT
+      username: jhjh
+      password: Wjd999888!
+      minimum-idle: 2
+      maximum-pool-size: 3
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update # hibernate?? ??
+      naming:
+            physical-strategy: com.bobtime.common.strategy.CamelToSnakeUpperStrategy
+    show-sql: true  # SQL ?? ?? ??
+    generate-ddl: false # ? ??? ??? ???? ??
+    open-in-view: false # HTTP ??? ??? ??? ??? ?????? ??? ????
+#  web:
+#    resources:
+#      static-locations: classpath:/static/
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+
+
+
+
+
+
+
+
+
+
+
+
