@@ -1,34 +1,27 @@
-package com.bobtime.entity;
+package com.bobtime.dto.model;
 
 import com.bobtime.common.utils.DateUtils;
-import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
+@Builder
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "orders")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class OrderDTO {
     private Long num;
     private String role;
     private String productName;
     private int price;
     private boolean isPaid;
     private LocalDateTime paidAt;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userNum", nullable = false)
-    private User user;
+    private UserDTO user;
+
     /* Defaults */
+
     @Builder.Default
     private LocalDateTime createdAt = DateUtils.current();
-
-
 }
