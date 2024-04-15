@@ -1,5 +1,11 @@
 server:
-  port: 4070
+  port: 443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: 1q2w3e4r!
+    key-store-type: PKCS12
+    enabled: true
+    key-alias: bobtime-ssl
 
 spring:
   datasource:
@@ -15,7 +21,7 @@ spring:
     hibernate:
       ddl-auto: update # hibernate?? ??
       naming:
-            physical-strategy: com.bobtime.common.strategy.CamelToSnakeUpperStrategy
+        physical-strategy: com.bobtime.common.strategy.CamelToSnakeUpperStrategy
     show-sql: true  # SQL ?? ?? ??
     generate-ddl: false # ? ??? ??? ???? ??
     open-in-view: false # HTTP ??? ??? ??? ??? ?????? ??? ????
