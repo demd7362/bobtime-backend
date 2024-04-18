@@ -42,9 +42,9 @@ public class OrderService {
         User user = userRepository.findByName(userDTO.getName())
                 .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
 
-        LocalDate targetDate = LocalDate.now();
+        LocalDate targetDate = orderDTO.getCreatedAt().toLocalDate();
         LocalDateTime startOfDay = targetDate.atStartOfDay();
-        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1);
+        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1).minusSeconds(1);
         AtomicBoolean isMerged = new AtomicBoolean(false);
         Order order = orderRepository.findByUserAndCreatedAtBetween(user, startOfDay, endOfDay)
                 .map(o -> {
@@ -57,6 +57,7 @@ public class OrderService {
                     return Order.builder()
                             .price(orderDTO.getPrice())
                             .user(user)
+                            .createdAt(orderDTO.getCreatedAt())
                             .productName(orderDTO.getProductName())
                             .build();
                 });
@@ -67,7 +68,7 @@ public class OrderService {
     public List<OrderDTO> getOrdersByDate(LocalDateTime dateTime) {
         LocalDate targetDate = LocalDate.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth());
         LocalDateTime startOfDay = targetDate.atStartOfDay();
-        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1);
+        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1).minusSeconds(1);
         List<Order> orders = orderRepository.findAllByCreatedAtBetween(startOfDay, endOfDay);
         return orders.stream().map(order -> {
             OrderDTO orderDTO = EntityUtils.copyObject(order, OrderDTO.class);
@@ -96,9 +97,10 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
         LocalDate targetDate = LocalDate.now();
         LocalDateTime startOfDay = targetDate.atStartOfDay();
-        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1);
+        LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1).minusSeconds(1);
         Order order = orderRepository.findByUserAndCreatedAtBetween(user, startOfDay, endOfDay).orElseThrow();
         order.setPaid(true);
+        order.setPaidAt(DateUtils.current());
         orderRepository.save(order);
     }
 
