@@ -1,4 +1,7 @@
 server:
+  error:
+    whitelabel:
+      enabled: false
   port: 4070
 #  ssl:
 #    key-store: classpath:keystore.p12
