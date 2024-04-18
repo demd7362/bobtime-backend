@@ -1,6 +1,6 @@
 package com.bobtime.common.exception;
 
-import com.bobtime.common.enums.ResponseMessage;
+import com.bobtime.common.enums.dialog.DialogMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ResponseException extends RuntimeException {
     private final HttpStatus httpStatus;
-    private final ResponseMessage responseMessage;
+    private final DialogMessage dialogMessage;
 }
 

@@ -1,9 +1,8 @@
 package com.bobtime.controller;
 
-import com.bobtime.dto.request.RequestDTO;
+import com.bobtime.common.enums.dialog.UserMessage;
 import com.bobtime.dto.request.UserRequestDTO;
 import com.bobtime.dto.response.ResponseDTO;
-import com.bobtime.entity.User;
 import com.bobtime.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class UserController {
         userService.join(request);
         return ResponseDTO.entityBuilder()
                 .httpStatus(HttpStatus.OK)
-                .message(() -> "등록 완료")
+                .message(UserMessage.CREATE_SUCCESS)
                 .build();
     }
 }

@@ -1,8 +1,8 @@
 package com.bobtime.dto.response;
 
 
-import com.bobtime.common.enums.ResponseMessage;
-import com.bobtime.common.enums.ServerMessage;
+import com.bobtime.common.enums.dialog.DialogMessage;
+import com.bobtime.common.enums.dialog.ServerMessage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 public class ResponseDTO {
     private HttpStatus httpStatus;
     private Object data;
-    private ResponseMessage message;
+    private DialogMessage message;
     private int statusCode;
 
     public static ResponseBuilder entityBuilder() {
@@ -29,7 +29,7 @@ public class ResponseDTO {
     public static class ResponseBuilder {
         private HttpStatus httpStatus;
         private Object data;
-        private ResponseMessage message;
+        private DialogMessage message;
         private int statusCode;
 
         public ResponseBuilder httpStatus(HttpStatus httpStatus) {
@@ -49,7 +49,7 @@ public class ResponseDTO {
             return this;
         }
 
-        public ResponseBuilder message(ResponseMessage message) {
+        public ResponseBuilder message(DialogMessage message) {
             this.message = message;
             return this;
         }

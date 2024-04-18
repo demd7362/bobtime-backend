@@ -1,6 +1,7 @@
 package com.bobtime.controller;
 
-import com.bobtime.common.enums.OrderMessage;
+import com.bobtime.common.enums.dialog.DialogMessage;
+import com.bobtime.common.enums.dialog.OrderMessage;
 import com.bobtime.dto.model.OrderDTO;
 import com.bobtime.dto.request.OrderRequestDTO;
 import com.bobtime.dto.response.ResponseDTO;
@@ -20,11 +21,12 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createOrder(@RequestBody OrderRequestDTO request){
-        orderService.createOrder(request);
+    @PostMapping("/merge")
+    public ResponseEntity<ResponseDTO> mergeOrder(@RequestBody OrderRequestDTO request){
+        boolean isMerged = orderService.mergeOrder(request);
+        OrderMessage message = isMerged ? OrderMessage.MERGED : OrderMessage.INSERTED;
         return ResponseDTO.entityBuilder()
-                .message(OrderMessage.ORDERED)
+                .message(message)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
@@ -38,10 +40,19 @@ public class OrderController {
                 .build();
     }
     @PatchMapping("/toggle-paid/{orderNum}")
-    public ResponseEntity<ResponseDTO> getOrders(@PathVariable long orderNum){
-        orderService.togglePaid(orderNum);
+    public ResponseEntity<ResponseDTO> togglePaid(@PathVariable long orderNum){
+        boolean isPaid = orderService.togglePaidByOrderNum(orderNum);
+        DialogMessage message = isPaid ? OrderMessage.PAID : OrderMessage.NOT_PAID;
         return ResponseDTO.entityBuilder()
-                .message(() -> "성공했습니다.")
+                .message(message)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+    @PatchMapping("/paid/{userName}")
+    public ResponseEntity<ResponseDTO> setPaidAsTrueByUserName(@PathVariable String userName){
+        orderService.setPaidAsTrueByUserName(userName);
+        return ResponseDTO.entityBuilder()
+                .message(OrderMessage.PAID)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }

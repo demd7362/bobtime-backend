@@ -18,7 +18,6 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long num;
-    private String role;
     private String productName;
     private int price;
     private boolean isPaid;

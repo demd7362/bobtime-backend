@@ -1,5 +1,6 @@
 package com.bobtime.dto.model;
 
+import com.bobtime.common.enums.Role;
 import com.bobtime.common.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     private Long num;
     private String name;
+    private Role role;
     @Builder.Default
     private LocalDateTime createdAt = DateUtils.current();
 }

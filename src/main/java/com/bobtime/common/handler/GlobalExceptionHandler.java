@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDTO> handleResponseException(ResponseException e) {
         return ResponseDTO.entityBuilder()
                 .httpStatus(e.getHttpStatus())
-                .message(e.getResponseMessage())
+                .message(e.getDialogMessage())
                 .build();
     }
 }

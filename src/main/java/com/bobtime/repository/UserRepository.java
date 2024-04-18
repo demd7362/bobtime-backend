@@ -1,5 +1,6 @@
 package com.bobtime.repository;
 
+import com.bobtime.common.enums.Role;
 import com.bobtime.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long deleteByNumBetween(Long numStart, Long numEnd);
 
     Optional<User> findByName(String name);
+    Optional<User> findByRole(Role role);
 }
