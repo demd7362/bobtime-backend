@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum UserMessage implements DialogMessage {
     ROLE_UPDATE_SUCCESS(new Dialog("변경 성공","변경에 성공하였습니다.")),
-    CREATE_SUCCESS(new Dialog("등록 성공","등록에 성공하였습니다."));
+    CREATE_SUCCESS(new Dialog("등록 성공","등록에 성공하였습니다.")),
+    GET_INFO_SUCCESS(new Dialog("조회 성공","조회에 성공하였습니다."));
     private final Dialog dialog;
 }

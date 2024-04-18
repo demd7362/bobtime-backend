@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,7 +31,6 @@ public class OrderService {
     private final UserRepository userRepository;
 
     /**
-     *
      * @param request
      * @return true -> merged, false -> inserted
      */
@@ -39,7 +40,7 @@ public class OrderService {
         UserDTO userDTO = request.getUser();
 
         User user = userRepository.findByName(userDTO.getName())
-                .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근","사용자가 등록되어 있지 않습니다.")));
+                .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
 
         LocalDate targetDate = LocalDate.now();
         LocalDateTime startOfDay = targetDate.atStartOfDay();
@@ -76,7 +77,6 @@ public class OrderService {
     }
 
     /**
-     *
      * @param orderNum
      * @return true -> paid false -> not paid yet
      */
@@ -84,7 +84,7 @@ public class OrderService {
     public boolean togglePaidByOrderNum(long orderNum) {
         Order order = orderRepository.findById(orderNum).orElseThrow();
         order.setPaid(!order.isPaid());
-        if(order.isPaid()){
+        if (order.isPaid()) {
             order.setPaidAt(DateUtils.current());
         }
         orderRepository.save(order);
@@ -93,12 +93,35 @@ public class OrderService {
 
     public void setPaidAsTrueByUserName(String userName) {
         User user = userRepository.findByName(userName)
-                .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근","사용자가 등록되어 있지 않습니다.")));
+                .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
         LocalDate targetDate = LocalDate.now();
         LocalDateTime startOfDay = targetDate.atStartOfDay();
         LocalDateTime endOfDay = targetDate.atStartOfDay().plusDays(1);
         Order order = orderRepository.findByUserAndCreatedAtBetween(user, startOfDay, endOfDay).orElseThrow();
         order.setPaid(true);
         orderRepository.save(order);
+    }
+
+    public Map<String, Object> getUnpaidInformation() {
+        Map<String, Integer> unpaidEachDate = new HashMap<>();
+        Map<String, Integer> unpaidEachUser = new HashMap<>();
+        List<Order> unpaidOrderList = orderRepository.findAllByisPaidAndProductNameIsNot(false, "먹지 않음");
+        long totalUnpaidAmount = unpaidOrderList.stream()
+                .mapToLong(Order::getPrice)
+                .sum();
+
+        unpaidOrderList.forEach(order -> {
+            LocalDate localDate = order.getCreatedAt().toLocalDate();
+            String userName = order.getUser().getName();
+            int price = order.getPrice();
+
+            unpaidEachDate.merge(localDate.toString(), price, Integer::sum);
+            unpaidEachUser.merge(userName, price, Integer::sum);
+        });
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalAmount", totalUnpaidAmount);
+        result.put("unpaidEachDate", unpaidEachDate);
+        result.put("unpaidEachUser", unpaidEachUser);
+        return result;
     }
 }

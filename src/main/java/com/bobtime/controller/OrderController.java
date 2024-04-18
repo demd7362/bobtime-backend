@@ -56,5 +56,14 @@ public class OrderController {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+    @GetMapping("/unpaid-info")
+    public ResponseEntity<ResponseDTO> getUnpaidInformation(){
+        var data = orderService.getUnpaidInformation();
+        return ResponseDTO.entityBuilder()
+                .message(OrderMessage.PAID)
+                .data(data)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
 
 }

@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByCreatedAtBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<Order> findAllByisPaidAndProductNameIsNot(boolean isPaid, String productName);
 
     Optional<Order> findByUserAndCreatedAtBetween(User user, LocalDateTime startOfDay , LocalDateTime endOfDay);
 }

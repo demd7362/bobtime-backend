@@ -1,6 +1,8 @@
 package com.bobtime.service;
 
 import com.bobtime.common.enums.Role;
+import com.bobtime.common.utils.EntityUtils;
+import com.bobtime.dto.model.UserDTO;
 import com.bobtime.dto.request.UserRequestDTO;
 import com.bobtime.entity.User;
 import com.bobtime.repository.UserRepository;
@@ -37,5 +39,15 @@ public class UserService {
                         .role(request.getUser().getRole())
                         .build());
         userRepository.save(user);
+    }
+
+    public UserDTO getAdminInformation() {
+        Optional<User> optionalUser = userRepository.findByRole(Role.ADMIN);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            return EntityUtils.copyObject(user, UserDTO.class);
+        } else {
+            return null;
+        }
     }
 }
