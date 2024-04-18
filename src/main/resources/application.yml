@@ -2,13 +2,13 @@ server:
   error:
     whitelabel:
       enabled: false
-  port: 4070
-#  ssl:
-#    key-store: classpath:keystore.p12
-#    key-store-password: 1q2w3e4r!
-#    key-store-type: PKCS12
-#    enabled: true
-#    key-alias: bobtime-ssl
+  port: 443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: 1q2w3e4r!
+    key-store-type: PKCS12
+    enabled: true
+    key-alias: bobtime-ssl
 
 spring:
   datasource:
@@ -22,22 +22,12 @@ spring:
       auto-commit: false
   jpa:
     hibernate:
-      ddl-auto: update # hibernate?? ??
+      ddl-auto: update
       naming:
         physical-strategy: com.bobtime.common.strategy.CamelToSnakeUpperStrategy
-    show-sql: true  # SQL ?? ?? ??
-    generate-ddl: false # ? ??? ??? ???? ??
-    open-in-view: false # HTTP ??? ??? ??? ??? ?????? ??? ????
-#  mvc:
-#    hiddenmethod:
-#      filter:
-#        enabled: true
-#  web:
-#    resources:
-#      static-locations: classpath:/static/
-#  mvc:
-#    pathmatch:
-#      matching-strategy: ant_path_matcher
+    show-sql: true
+    generate-ddl: false
+    open-in-view: false
 
 
 
