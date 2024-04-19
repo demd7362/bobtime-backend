@@ -17,13 +17,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -45,8 +43,12 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         List<Order> orders = new ArrayList<>();
+        List<DayOfWeek> notOrderingDay = List.of(DayOfWeek.SATURDAY,DayOfWeek.SUNDAY);
         for (int i = 0; i <= daysBetween; i++) {
             LocalDateTime dateTime = startDate.plusDays(i).toLocalDate().atStartOfDay();
+            if(notOrderingDay.contains(dateTime.getDayOfWeek())){
+                continue;
+            }
             Order order = orderRepository.findByUserAndCreatedAt(user, dateTime)
                     .map(o -> {
                         o.setPrice(orderDTO.getPrice());
