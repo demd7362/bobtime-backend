@@ -11,6 +11,9 @@ server:
     key-alias: bobtime-ssl
 
 spring:
+  web:
+    resources:
+      static-locations: classpath:/static/
   datasource:
     hikari:
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
