@@ -2,13 +2,13 @@ server:
   error:
     whitelabel:
       enabled: false
-  port: 443
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: 1q2w3e4r!
-    key-store-type: PKCS12
-    enabled: true
-    key-alias: bobtime-ssl
+  port: 4070
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: 1q2w3e4r!
+#    key-store-type: PKCS12
+#    enabled: true
+#    key-alias: bobtime-ssl
 
 spring:
   datasource:
