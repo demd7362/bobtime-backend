@@ -25,10 +25,10 @@ public class UserController {
     }
     @GetMapping("/admin-info")
     public ResponseEntity<ResponseDTO> getAdminInformation(){
-        UserDTO userDTO = userService.getAdminInformation();
+        var data = userService.getAdminInformation();
         return ResponseDTO.entityBuilder()
                 .httpStatus(HttpStatus.OK)
-                .data(userDTO)
+                .data(data)
                 .message(UserMessage.CREATE_SUCCESS)
                 .build();
     }

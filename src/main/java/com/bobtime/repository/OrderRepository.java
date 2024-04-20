@@ -13,7 +13,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Sort sort);
     List<Order> findAllByisPaidAndProductNameIsNot(boolean isPaid, String productName);
-
     Optional<Order> findByUserAndCreatedAtBetween(User user, LocalDateTime startDate , LocalDateTime endDate);
     Optional<Order> findByUserAndCreatedAt(User user, LocalDateTime date);
 }

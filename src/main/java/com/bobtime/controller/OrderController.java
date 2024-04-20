@@ -32,11 +32,11 @@ public class OrderController {
 
     @GetMapping("/orders")
     public ResponseEntity<ResponseDTO> getOrders(@RequestParam("start") @DateTimeFormat LocalDateTime startDate, @RequestParam("end") @DateTimeFormat LocalDateTime endDate) {
-        List<OrderDTO> orders = orderService.getOrdersByDate(startDate, endDate);
+        var data = orderService.getOrdersByDate(startDate, endDate);
         return ResponseDTO.entityBuilder()
                 .message(OrderMessage.GET_SUCCESS)
                 .httpStatus(HttpStatus.OK)
-                .data(orders)
+                .data(data)
                 .build();
     }
 
@@ -62,6 +62,15 @@ public class OrderController {
     @GetMapping("/unpaid-info")
     public ResponseEntity<ResponseDTO> getUnpaidInformation() {
         var data = orderService.getUnpaidInformation();
+        return ResponseDTO.entityBuilder()
+                .message(OrderMessage.PAID)
+                .data(data)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+    @GetMapping("/unpaid-users")
+    public ResponseEntity<ResponseDTO> getUnpaidUsers() {
+        var data = orderService.getUnpaidUsers();
         return ResponseDTO.entityBuilder()
                 .message(OrderMessage.PAID)
                 .data(data)

@@ -136,4 +136,8 @@ public class OrderService {
         result.put("unpaidEachUser", unpaidEachUser);
         return result;
     }
+    public List<UserDTO> getUnpaidUsers(){
+        List<Order> unpaidOrderList = orderRepository.findAllByisPaidAndProductNameIsNot(false, "먹지 않음");
+        return unpaidOrderList.stream().map(order -> EntityUtils.copyObject(order.getUser(), UserDTO.class)).toList();
+    }
 }
