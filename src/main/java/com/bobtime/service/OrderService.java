@@ -1,5 +1,6 @@
 package com.bobtime.service;
 
+import com.bobtime.common.enums.Role;
 import com.bobtime.common.exception.ResponseException;
 import com.bobtime.common.model.Dialog;
 import com.bobtime.common.utils.DateUtils;
@@ -22,13 +23,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private static final List<DayOfWeek> NOT_ORDERING_DAY = List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
     /**
      * @param request
@@ -43,23 +44,32 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseException(HttpStatus.BAD_REQUEST, () -> new Dialog("잘못된 접근", "사용자가 등록되어 있지 않습니다.")));
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         List<Order> orders = new ArrayList<>();
-        List<DayOfWeek> notOrderingDay = List.of(DayOfWeek.SATURDAY,DayOfWeek.SUNDAY);
+        boolean isAdmin = user.getRole() == Role.ADMIN;
         for (int i = 0; i <= daysBetween; i++) {
             LocalDateTime dateTime = startDate.plusDays(i).toLocalDate().atStartOfDay();
-            if(notOrderingDay.contains(dateTime.getDayOfWeek())){
+            if (NOT_ORDERING_DAY.contains(dateTime.getDayOfWeek())) {
                 continue;
             }
             Order order = orderRepository.findByUserAndCreatedAt(user, dateTime)
                     .map(o -> {
                         o.setPrice(orderDTO.getPrice());
                         o.setProductName(orderDTO.getProductName());
+                        if (isAdmin) {
+                            o.setPaid(true);
+                            o.setPaidAt(dateTime);
+                        }
                         return o;
-                    }).orElseGet(() -> Order.builder()
-                            .price(orderDTO.getPrice())
-                            .user(user)
-                            .createdAt(dateTime)
-                            .productName(orderDTO.getProductName())
-                            .build());
+                    }).orElseGet(() -> {
+                        var builder = Order.builder()
+                                .price(orderDTO.getPrice())
+                                .user(user)
+                                .createdAt(dateTime)
+                                .productName(orderDTO.getProductName());
+                        if (isAdmin) {
+                            builder.isPaid(true).paidAt(dateTime);
+                        }
+                        return builder.build();
+                    });
             orders.add(order);
         }
         orderRepository.saveAll(orders);
