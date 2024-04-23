@@ -76,7 +76,9 @@ public class OrderService {
     }
 
     public List<OrderDTO> getOrdersByDate(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Order> orders = orderRepository.findAllByCreatedAtBetween(startDate, endDate, Sort.by("createdAt"));
+        LocalDateTime startOfDay = startDate.toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = endDate.toLocalDate().plusDays(1).atStartOfDay().minusSeconds(1);
+        List<Order> orders = orderRepository.findAllByCreatedAtBetween(startOfDay, endOfDay, Sort.by("createdAt"));
         return orders.stream().map(order -> {
             OrderDTO orderDTO = EntityUtils.copyObject(order, OrderDTO.class);
             orderDTO.setUser(EntityUtils.copyObject(order.getUser(), UserDTO.class));
