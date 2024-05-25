@@ -5,7 +5,7 @@ server:
   port: 443
   ssl:
     key-store: classpath:keystore.p12
-    key-store-password: 1q2w3e4r!
+    key-store-password: 1q2w3e4r! 
     key-store-type: PKCS12
     enabled: true
     key-alias: bobtime-ssl
@@ -19,7 +19,7 @@ spring:
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       jdbc-url: jdbc:log4jdbc:mysql://144.24.74.58:3306/BT
       username: jhjh
-      password: Wjd999888!
+      password: Wjd999888! # Even if you see this, it's changed.
       minimum-idle: 2
       maximum-pool-size: 3
       auto-commit: false
